@@ -51,11 +51,18 @@ const notes = [
   },
 ];
 
-const subjects = ['All Subjects', 'Mathematics', 'Physics', 'Chemistry', 'Computer Science', 'English'];
+const subjects = [
+  { label: 'All Subjects', value: 'all-subjects' },
+  { label: 'Mathematics', value: 'mathematics' },
+  { label: 'Physics', value: 'physics' },
+  { label: 'Chemistry', value: 'chemistry' },
+  { label: 'Computer Science', value: 'computer-science' },
+  { label: 'English', value: 'english' }
+];
 
 export default function Notes() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('All Subjects');
+  const [selectedSubject, setSelectedSubject] = useState('all-subjects');
   const [sortBy, setSortBy] = useState('modified');
   const [showStarred, setShowStarred] = useState(false);
 
@@ -74,7 +81,7 @@ export default function Notes() {
     const matchesSearch = note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          note.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          note.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesSubject = selectedSubject === 'All Subjects' || note.subject === selectedSubject;
+    const matchesSubject = selectedSubject === 'all-subjects' || note.subject.toLowerCase().replace(' ', '-') === selectedSubject;
     const matchesStarred = !showStarred || note.starred;
     return matchesSearch && matchesSubject && matchesStarred;
   });
@@ -128,8 +135,8 @@ export default function Notes() {
               </SelectTrigger>
               <SelectContent>
                 {subjects.map((subject) => (
-                  <SelectItem key={subject} value={subject}>
-                    {subject}
+                  <SelectItem key={subject.value} value={subject.value}>
+                    {subject.label}
                   </SelectItem>
                 ))}
               </SelectContent>

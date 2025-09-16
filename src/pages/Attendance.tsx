@@ -21,7 +21,7 @@ const attendanceRecords = [
 
 export default function Attendance() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const [selectedSubject, setSelectedSubject] = useState<string>('all-subjects');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [showMarkAttendance, setShowMarkAttendance] = useState(false);
@@ -56,7 +56,9 @@ export default function Attendance() {
     const matchesSearch = record.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          record.date.includes(searchTerm);
     const matchesStatus = filterStatus === 'all' || record.status === filterStatus;
-    return matchesSearch && matchesStatus;
+    const matchesSubject = selectedSubject === 'all-subjects' || selectedSubject === '' || 
+                          record.subject.toLowerCase().replace(' ', '-') === selectedSubject;
+    return matchesSearch && matchesStatus && matchesSubject;
   });
 
   return (
@@ -190,7 +192,7 @@ export default function Attendance() {
                 <SelectValue placeholder="Filter by subject" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Subjects</SelectItem>
+                <SelectItem value="all-subjects">All Subjects</SelectItem>
                 {subjects.map((subject) => (
                   <SelectItem key={subject} value={subject.toLowerCase().replace(' ', '-')}>
                     {subject}
